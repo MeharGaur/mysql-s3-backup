@@ -7,4 +7,4 @@ A simple NodeJS application to backup your MySQL database to S3 via a cron.
 * set environment variables as per `/src/env.ts`
 * `npm install` to install the dependencies
 * `npm run build` to build the app
-* `npm run start` to run the app
+* `npm run start` to run the app 
