@@ -4,6 +4,7 @@ import { createReadStream, unlink } from "fs";
 import { env } from "./env";
 import crypto from 'crypto'
 
+// @ts-ignore
 function getMD5HashFromFile(file){
   var hash = crypto.createHash("md5")
       .update(file)
