@@ -49,12 +49,13 @@ const dumpToFile = async (path: string): Promise<void> => {
   console.log(`Dumping database to file at ${path}...`);
 
   await new Promise((resolve, reject) => {
-    console.log(env);
+    const command = `mysqldump --host=${env.BACKUP_DATABASE_HOST} --port=${env.BACKUP_DATABASE_PORT} --user=${env.BACKUP_DATABASE_USER} --password=${env.BACKUP_DATABASE_PASSWORD} ${env.BACKUP_DATABASE_NAME} | gzip > ${path}`;
+    console.log("COMMAND: ", command);
 
     exec(
-      `mysqldump --host=${env.BACKUP_DATABASE_HOST} --port=${env.BACKUP_DATABASE_PORT} --user=${env.BACKUP_DATABASE_USER} --password=${env.BACKUP_DATABASE_PASSWORD} ${env.BACKUP_DATABASE_NAME} | gzip > ${path}`,
-      (error, _, stderr) => {
-        if (error) {
+      command,
+      (error, stdout, stderr) => {
+        if (error || stderr) {
           reject({ error: JSON.stringify(error), stderr });
           return;
         }
