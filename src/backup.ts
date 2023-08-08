@@ -50,7 +50,7 @@ const dumpToFile = async (path: string): Promise<void> => {
 
   await new Promise((resolve, reject) => {
     const command = `mysqldump --host=${env.BACKUP_DATABASE_HOST} --port=${env.BACKUP_DATABASE_PORT} --user=${env.BACKUP_DATABASE_USER} --password=${env.BACKUP_DATABASE_PASSWORD} ${env.BACKUP_DATABASE_NAME} | gzip > ${path}`;
-    console.log("COMMAND: ", command);
+    // console.log("COMMAND: ", command);
 
     exec(
       command,
