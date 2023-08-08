@@ -1,6 +1,6 @@
 import { exec } from "child_process";
 import { PutObjectCommand, S3Client, S3ClientConfig } from "@aws-sdk/client-s3";
-import { createReadStream, unlink } from "fs";
+import { createReadStream, unlink, readFileSync } from "fs";
 import { env } from "./env";
 import crypto from 'crypto'
 
@@ -28,9 +28,9 @@ const uploadToS3 = async (file: {name: string, path: string}): Promise<void> => 
 
   const client = new S3Client(clientOptions);
 
-  const fileBuffer = fs.readFileSync(file.path);
+  const fileBuffer = readFileSync(file.path);
   const md5Hash = getMD5HashFromFile(fileBuffer);
-  
+
   const readStream = createReadStream(file.path);
 
   await client.send(
