@@ -28,8 +28,10 @@ const uploadToS3 = async (file: {name: string, path: string}): Promise<void> => 
 
   const client = new S3Client(clientOptions);
 
+  const fileBuffer = fs.readFileSync(file.path);
+  const md5Hash = getMD5HashFromFile(fileBuffer);
+  
   const readStream = createReadStream(file.path);
-  const md5Hash = getMD5HashFromFile(readStream);
 
   await client.send(
     new PutObjectCommand({
