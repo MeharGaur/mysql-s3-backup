@@ -2,6 +2,14 @@ import { exec } from "child_process";
 import { PutObjectCommand, S3Client, S3ClientConfig } from "@aws-sdk/client-s3";
 import { createReadStream, unlink } from "fs";
 import { env } from "./env";
+import crypto from 'crypto'
+
+function getMD5HashFromFile(file){
+  var hash = crypto.createHash("md5")
+      .update(file)
+      .digest("base64");
+  return hash;
+}
 
 const uploadToS3 = async (file: {name: string, path: string}): Promise<void> => {
   const bucket = env.AWS_S3_BUCKET;
@@ -19,11 +27,15 @@ const uploadToS3 = async (file: {name: string, path: string}): Promise<void> => 
 
   const client = new S3Client(clientOptions);
 
+  const readStream = createReadStream(file.path);
+  const md5Hash = getMD5HashFromFile(readStream);
+
   await client.send(
     new PutObjectCommand({
       Bucket: bucket,
       Key: file.name,
-      Body: createReadStream(file.path),
+      Body: readStream,
+      ContentMD5: md5Hash
     })
   )
 
